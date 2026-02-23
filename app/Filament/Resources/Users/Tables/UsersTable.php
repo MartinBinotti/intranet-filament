@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
 
 class UsersTable
 {
@@ -57,6 +58,18 @@ class UsersTable
             ])
             ->filters([
                 //
+                SelectFilter::make('country_id')
+                    ->relationship(name: 'country', titleAttribute: 'name')
+                    ->searchable()
+                    ->preload(),
+                SelectFilter::make('state_id')
+                    ->relationship(name: 'state', titleAttribute: 'name')
+                    ->searchable()
+                    ->preload(),
+                SelectFilter::make('city_id')
+                    ->relationship(name: 'city', titleAttribute: 'name')
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 EditAction::make(),

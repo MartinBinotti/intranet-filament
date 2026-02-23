@@ -74,4 +74,33 @@ class User extends Authenticatable
     {
         return $this->belongsTo(City::class);
     }
+
+    /**
+     * Get the calendars and departaments that owns the user.
+     */
+    public function calendars(){
+        return $this->belongsToMany(Calendar::class, 'table_user_calendar', 'user_id', 'calendar_id');
+    }
+
+    /**
+     * Get the departaments that owns the user.
+     */
+    public function departaments(){
+        return $this->belongsToMany(Departament::class, 'table_user_departament', 'user_id', 'departament_id');
+    }
+
+    /**
+     * Get the holidays that owns the user.
+     */
+    public function holidays(){
+        return $this->hasMany(Holiday::class);
+    }
+
+    /**
+     * Get the timesheets that owns the user.
+     */
+    public function timesheets(){
+        return $this->hasMany(Timesheet::class);
+    }
+
 }

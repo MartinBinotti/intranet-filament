@@ -2,6 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\DashboardStatsOverview;
+use App\Filament\Widgets\HolidayStatusPieChart;
+use App\Filament\Widgets\PendingHolidaysTable;
+use App\Filament\Widgets\WeeklyNetHoursLineChart;
+use App\Filament\Widgets\WorkHoursBarChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -10,8 +15,6 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -38,8 +41,11 @@ class DashboardPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                DashboardStatsOverview::class,
+                WorkHoursBarChart::class,
+                HolidayStatusPieChart::class,
+                WeeklyNetHoursLineChart::class,
+                PendingHolidaysTable::class,
             ])
             ->middleware([
                 EncryptCookies::class,

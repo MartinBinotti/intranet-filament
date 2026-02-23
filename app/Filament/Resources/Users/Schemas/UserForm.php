@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
-use App\Models\City;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class UserForm
@@ -16,7 +16,6 @@ class UserForm
     {
         return $schema
             ->components([
-                // Campos existentes
                 TextInput::make('name')
                     ->required(),
 
@@ -31,9 +30,14 @@ class UserForm
                     ->password()
                     ->required(),
 
-                // --------------------------
-                // NUEVOS CAMPOS DE DIRECCIÓN
-                // --------------------------
+                Select::make('calendars')
+                    ->label('Calendars')
+                    ->relationship(name: 'calendars', titleAttribute: 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->native(false),
+
                 Select::make('country_id')
                     ->label('Country')
                     ->options(Country::all()->pluck('name', 'id'))
@@ -49,10 +53,11 @@ class UserForm
                     ->label('State')
                     ->options(function (callable $get) {
                         $countryId = $get('country_id');
+
                         return $countryId ? State::where('country_id', $countryId)->pluck('name', 'id') : [];
                     })
                     ->reactive()
-                    ->afterStateUpdated(fn($state, $set) => $set('city_id', null))
+                    ->afterStateUpdated(fn ($state, $set) => $set('city_id', null))
                     ->searchable()
                     ->required(),
 
@@ -60,6 +65,7 @@ class UserForm
                     ->label('City')
                     ->options(function (callable $get) {
                         $stateId = $get('state_id');
+
                         return $stateId ? City::where('state_id', $stateId)->pluck('name', 'id') : [];
                     })
                     ->searchable()
